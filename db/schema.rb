@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,30 +12,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_02_033845) do
-
+ActiveRecord::Schema.define(version: 20_231_121_161_848) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "movies", force: :cascade do |t|
-    t.string "title", null: false
-    t.date "release_date", null: false
-    t.string "runtime"
-    t.string "genre"
-    t.string "parental_rating"
-    t.text "plot"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.float "rating"
+  create_table 'movies', force: :cascade do |t|
+    t.string 'title', null: false
+    t.date 'release_date', null: false
+    t.string 'runtime'
+    t.string 'genre'
+    t.string 'parental_rating'
+    t.text 'plot'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.decimal 'rating', precision: 2, scale: 1, default: '1.0'
   end
 
-  create_table "ratings", force: :cascade do |t|
-    t.bigint "movie_id", null: false
-    t.integer "grade"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["movie_id"], name: "index_ratings_on_movie_id"
+  create_table 'ratings', force: :cascade do |t|
+    t.bigint 'movie_id', null: false
+    t.integer 'grade'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['movie_id'], name: 'index_ratings_on_movie_id'
   end
 
-  add_foreign_key "ratings", "movies"
+  add_foreign_key 'ratings', 'movies'
 end

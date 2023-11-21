@@ -1,23 +1,31 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Movies::API do
-  let!(:movie) { Movie.create(title: "teste", release_date: Date.today) }
-  let!(:movie2) { Movie.create(title: "teste2", release_date: Date.tomorrow) }
+  let!(:movie) { Movie.create(title: 'teste', release_date: Date.today) }
+  let!(:movie2) { Movie.create(title: 'teste2', release_date: Date.tomorrow) }
 
   describe 'GET /api/v1/movies' do
     it 'returns all movies' do
-      get "/api/v1/movies/"
+      get '/api/v1/movies/'
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("teste")
-      expect(response.body).to include("teste2")
+      expect(response.body).to include('teste')
+      expect(response.body).to include('teste2')
     end
   end
 
   describe 'GET /api/v1/movies/search' do
     it 'returns searched movie' do
-      get "/api/v1/movies/search?title=2"
+      get '/api/v1/movies/search?title=2'
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("teste2")
+      expect(response.body).to include('teste2')
+    end
+
+    it 'return not found' do
+      get '/api/v1/movies/search?title=3'
+      expect(response).to have_http_status(:not_found)
+      expect(response.body).to include('nothing for this search')
     end
   end
 
@@ -25,13 +33,13 @@ RSpec.describe Movies::API do
     it 'returns movie using id' do
       get "/api/v1/movies/#{movie2.id}"
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("teste2")
+      expect(response.body).to include('teste2')
     end
   end
 
   describe 'POST /api/v1/movies' do
     it 'returns movie using id' do
-      post "/api/v1/movies", :params => { :title => "Any Name", release_date: Date.yesterday }
+      post '/api/v1/movies', params: { title: 'Any Name', release_date: Date.yesterday }
       expect(response).to have_http_status(:created)
       expect(Movie.count).to eq(3)
     end
