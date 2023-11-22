@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_11_21_204344) do
+ActiveRecord::Schema.define(version: 2023_11_22_174944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,5 +43,13 @@ ActiveRecord::Schema.define(version: 2023_11_21_204344) do
       movies.rating
      FROM movies
     ORDER BY movies.genre, movies.rating DESC, movies.title;
+  SQL
+  create_view "year_with_most_movies", sql_definition: <<-SQL
+      SELECT (date_part('YEAR'::text, movies.release_date))::integer AS release_year,
+      count(movies.id) AS count
+     FROM movies
+    GROUP BY ((date_part('YEAR'::text, movies.release_date))::integer)
+    ORDER BY (count(movies.id)) DESC
+   LIMIT 1;
   SQL
 end
