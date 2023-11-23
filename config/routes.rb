@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   mount YearWithMostMovies::API => '/'
   mount MovieWithGoodRatings::API => '/'
   mount MovieWithoutRatings::API => '/'
+  mount MovieWithMostRatings::API => '/'
 
   mount Sidekiq::Web => '/sidekiq'
 end
