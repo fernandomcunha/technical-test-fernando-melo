@@ -6,6 +6,10 @@ module Movies
     prefix 'api'
     format :json
 
+    content_type :jsonapi, 'application/vnd.api+json'
+    formatter :json, Grape::Formatter::Jsonapi
+    formatter :jsonapi, Grape::Formatter::Jsonapi
+
     resource :movies do
       desc 'returns all movies'
       get do
