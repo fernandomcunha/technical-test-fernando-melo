@@ -1,75 +1,228 @@
-# About your test
+# Technical Test
 
-For your technical test, fork this repository and then proceed as mentioned on the problem proposal below. Please feel free to reach out if you have any questions about the proposal!
+Test developed for the Full Stack position at Instituto Atlantico.
 
-# Problem proposal
+# Steps to setup and run project
 
-Welcome to your technical test! Here's the problem you're trying to solve:
+1. For this project, Ruby version 2.7.1 was used. I recommend using [Go Rails](https://gorails.com/guides) to setup and configure this version of Ruby.
 
-Your team was tasked to create a project from scratch that would list upcoming movie releases in Brazil. This project would have:
-- An application with the backend code, written in Ruby on Rails
-- An application with the frontend code, written in a JavaScript framework yet to be decided
+2. Install NodeJS version 20.8.1
 
-## API
+3. Install [Ember](https://guides.emberjs.com/v5.4.0/getting-started/quick-start/) version 5.4.1
 
-Your team started working on the API. After some time, you realized that the codebase might need some refactoring, and you were given the opportunity to help! We ask the following things from you:
+4. Install required gems
 
-- Analyze the code from the repository, compare it with the requirements listed below, and check for possible problems and improvement oportunities;
-- Open one or more PRs with your suggestions. You can refactor the code, explaining the reasons for the changes on commit messages or whatever other means you think are more appropriate;
-- You can also add new functionalities if you'd like!
-- Lastly, we want to have some stats from the movies database. Add more movies to the database setup, and then create 5 database views with different stats that we can use to query the database. some ideas of questions that can be answered:
-  - What’s the highest rated movie by genre and parental rating?
-  - Which year had the most movies?
-  - What’s the moving average of ratings over the past two months?
- 
-## UI
+```bash
+bundle install
+```
 
-After our API is fixed, we can move on to the UI portion of the application. Since nothing for it has been written yet, it's your chance to do it however you want! We ask the following things from you:
+5. Install gem foreman, we don't need to add it to Gemfile because we don't need it to be loaded into the application as a dependency. [Wiki Article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman)
 
-- Create a frontend application that will interact with our API and display:
-  - A list of movies
-  - An individual page where we can learn more about each movie
-- The App can be done with whatever frontend framework you prefer, but it needs to be separate from the API
-- Bonus points if you can make components wherever possible 
+```bash
+gem install foreman
+```
 
-# Proposed application requirements
+6. Install [PostgreSQL](https://www.postgresql.org/download/) database.
 
-list upcoming movie releases in Brazil.
+7. Setup database credentials at config/database.yml
 
-- API written in Ruby on Rails;
-  - All endpoints should return JSON unless specified.
-- UI written in a JavaScript framework of your choice
-  - It needs to get data from our API
-- If you can, deploy your work somewhere so we can see it working
-  - If you can't deploy it, provide a README / guide on how to get your app up and running
+8. Create database and run migrations
+
+```bash
+rails db:create && rails db:migrate
+```
+
+9. Install [Redis](https://redis.io/docs/install/install-redis/)
+
+10. Run application using Procfile
+
+```bash
+foreman start
+```
+
+You can access the API endpoints by https://localhost:3000/api/v1/movies and frontend by https://localhost:4200/movies
+
+## New features:
+
+1. Create a job to calculate rating from a movie every time a new rating is created and remove that responsability from request
+
+2. Created 5 views to show some stats from the database
+
+  - HighestRatedByGenre
+  - YearWithMostMovie
+  - MovieWithGoodRating
+  - MovieWithoutRating
+  - MovieWithMostRating
+
+3. Change Movies API endpoints to JSONApi format
+
+4. Create a frontend using Ember.js framework to show a list of movies and a page with information of a particular movie
 
 ## API Endpoints:
 
 ### GET /movies
-List all movies on a reverse chronological order.
+List all movies.
 
-Data from the movie that should be shown:
-- title
-- release_date
-- genre
-- runtime
-- parental_rating
-- plot
-- average user ratings (from 1 to 5)
+```json
+{
+  "data": [
+    {
+      "id": "1",
+      "type": "movie",
+      "attributes": {
+        "id": 1,
+        "title": "Foo Bar",
+        "release_date": "2023-11-24",
+        "runtime": "120 min",
+        "genre": "Action",
+        "parental_rating": "N/A",
+        "plot": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."",
+        "rating": "4.2",
+        "created_at": "2023-11-24 14:00:33 UTC",
+        "updated_at": "2023-11-24 14:25:29 UTC"
+      }
+    }
+  ]
+}
+```
 
 ### GET /movies/:id
 Return information about a particular movie.
 
+```json
+{
+  "data": {
+    "id": "1",
+      "type": "movie",
+      "attributes": {
+        "id": 1,
+        "title": "Foo Bar",
+        "release_date": "2023-11-24",
+        "runtime": "120 min",
+        "genre": "Action",
+        "parental_rating": "N/A",
+        "plot": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."",
+        "rating": "4.2",
+        "created_at": "2023-11-24 14:00:33 UTC",
+        "updated_at": "2023-11-24 14:25:29 UTC"
+      }
+  }
+}
+```
+
 ### GET /movies/search?title=
 Search all movies on the database given a searched term.
+
+```json
+{
+  "data": [
+    {
+      "id": "1",
+        "type": "movie",
+        "attributes": {
+          "id": 1,
+          "title": "Foo Bar",
+          "release_date": "2023-11-24",
+          "runtime": "120 min",
+          "genre": "Action",
+          "parental_rating": "N/A",
+          "plot": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...",
+          "rating": "4.2",
+          "created_at": "2023-11-24 14:00:33 UTC",
+          "updated_at": "2023-11-24 14:25:29 UTC"
+        }
+    }
+  ]
+}
+```
 
 ### POST /movies
 Add a new movie.
 
+```json
+{
+  "title": "Foo Bar",
+  "release_date": "2023-11-24",
+  "runtime": "160 min",
+  "genre": "Horror",
+  "parental_rating": "N/A",
+  "plot": "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
+}
+```
+
 ### DELETE /movies/:id
 Remove a movie.
 
-### POST /ratings/:movie_id
+### GET /highest_rated_by_genres
+Returns highest rated movie by genre
+
+```json
+[
+  {
+    "title": "Foo Bar",
+    "genre": "Action",
+    "rating": "1.3"
+  }
+]
+```
+
+### GET /year_with_most_movies
+Returns year with most released movies
+
+```json
+[
+  {
+    "release_year": 2023,
+    "count": 4
+  }
+]
+```
+
+### GET /movie_with_good_ratings
+Returns movies with at leat one rating 4 or 5
+
+```json
+[
+  {
+    "title": "Foo Bar",
+    "genre": "Horror",
+    "release_date": "2023-11-24",
+    "rating": "2.5"
+  }
+]
+```
+
+### GET /movie_without_ratings
+Returns movies without any rating
+
+```json
+[
+  {
+    "title": "Foo Bar"
+  }
+]
+```
+
+### GET /movie_with_most_ratings
+Returns top 10 movies with most ratings
+
+```json
+[
+  {
+    "title": "Foo Bar",
+    "genre": "Horror",
+    "rating": "2.5",
+    "rating_count": 9
+  }
+]
+```
+
+### POST /ratings
 Rate a movie.
 
-WARNING: This is a fictional piece of work. No real codebases were harmed on the production of this test.
+```json
+{
+  "movie_id": "1",
+  "grade": 4
+}
+```
