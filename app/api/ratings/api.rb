@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Ratings
   class API < Grape::API
     version 'v1', using: :path
-    prefix "api"
+    prefix 'api'
     format :json
 
     resource :ratings do
@@ -13,9 +15,9 @@ module Ratings
 
       post do
         Rating.create!({
-          movie_id: params[:movie_id],
-          grade: params[:grade]
-        })
+                         movie_id: params[:movie_id],
+                         grade: params[:grade]
+                       })
       end
     end
   end

@@ -1,21 +1,19 @@
+# frozen_string_literal: true
+
 module Movies
   class API < Grape::API
     version 'v1', using: :path
-    prefix "api"
+    prefix 'api'
     format :json
+
+    content_type :jsonapi, 'application/vnd.api+json'
+    formatter :json, Grape::Formatter::Jsonapi
+    formatter :jsonapi, Grape::Formatter::Jsonapi
 
     resource :movies do
       desc 'returns all movies'
       get do
-        movies = Movie.all
-
-        movies.each do |movie|
-          if movie.ratings.count == 0
-            movie.rating = 0
-          else
-            movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
-          end
-        end
+        Movie.all
       end
 
       desc 'searches a movie using title'
@@ -24,13 +22,11 @@ module Movies
       end
 
       get '/search' do
-        movies = Movie.where("title ILIKE '%#{params[:title]}%'")
+        movies = Movie.title_ilike(params[:title])
 
-        if movies.any?
-          movies.first
-        else
-          error! "nothing for this search", :internal_server_error
-        end
+        error! 'nothing for this search', :not_found unless movies.any?
+
+        movies
       end
 
       desc 'Show information about a particular movie'
@@ -41,16 +37,9 @@ module Movies
       get '/:id' do
         movie = Movie.find_by_id(params[:id])
 
-        if movie
-          if movie.ratings.count == 0
-            movie.rating = 0
-          else
-            movie.rating = movie.ratings.map(&:grade).sum / movie.ratings.map(&:grade).count
-          end
-          movie
-        else
-          error! "not found", :internal_server_error
-        end
+        error! 'not found', :not_found unless movie
+
+        movie
       end
 
       desc 'Create a movie.'
@@ -65,13 +54,13 @@ module Movies
 
       post do
         Movie.create!({
-          title: params[:title],
-          release_date: params[:release_date],
-          runtime: params[:runtime],
-          genre: params[:genre],
-          parental_rating: params[:parental_rating],
-          plot: params[:plot]
-        })
+                        title: params[:title],
+                        release_date: params[:release_date],
+                        runtime: params[:runtime],
+                        genre: params[:genre],
+                        parental_rating: params[:parental_rating],
+                        plot: params[:plot]
+                      })
       end
 
       desc 'Delete a movie.'
