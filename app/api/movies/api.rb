@@ -26,7 +26,7 @@ module Movies
 
         error! 'nothing for this search', :not_found unless movies.any?
 
-        movies.first
+        movies
       end
 
       desc 'Show information about a particular movie'
