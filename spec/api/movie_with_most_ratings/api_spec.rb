@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe MovieWithMostRatings::API do
-  describe 'GET /api/v1/movie_without_ratings' do
+  describe 'GET /api/v1/movie_with_most_ratings' do
     it 'returns top 10 movies with most ratings' do
       create_list(:movie, 10) do |movie, i|
         create_list(:rating, rand(10..15)) do |rating, _x|
