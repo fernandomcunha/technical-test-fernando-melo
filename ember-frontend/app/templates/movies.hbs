@@ -1,0 +1,28 @@
+{{page-title "Movies"}}
+
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col">Release Date</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each @model as |movie|}}
+        <tr>
+          <th scope="row">{{movie.id}}</th>
+          <td><LinkTo @route="movie" @model={{movie}}>{{movie.title}}</LinkTo></td>
+          <td>{{movie.release_date}}</td>
+          <td>{{movie.genre}}</td>
+          <td>{{movie.rating}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+
+{{outlet}}

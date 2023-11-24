@@ -1,0 +1,21 @@
+{{page-title "Movies"}}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 offset-md-3">
+      <h2>{{@model.title}}</h2>
+
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><b>Title:</b> {{@model.title}}</li>
+        <li class="list-group-item"><b>Release Date:</b> {{@model.release_date}}</li>
+        <li class="list-group-item"><b>Runtime:</b> {{@model.runtime}}</li>
+        <li class="list-group-item"><b>Genre:</b> {{@model.genre}}</li>
+        <li class="list-group-item"><b>Parental Rating:</b> {{@model.parental_rating}}</li>
+        <li class="list-group-item"><b>Plot:</b> {{@model.plot}}</li>
+        <li class="list-group-item"><b>Rating:</b> {{@model.rating}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{{outlet}}
